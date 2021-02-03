@@ -57,8 +57,9 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class VoteSerializer(serializers.ModelSerializer):
     poll = PollSerializer(read_only=True)
+    answers = AnswerSerializer(many=True)
 
     class Meta:
         model = Vote
-        fields = ('id', 'poll_id', 'poll', 'user', 'date')
+        fields = ('id', 'poll_id', 'poll', 'user', 'date', 'answers')
         read_only_fields = ('id', 'user', 'date')
