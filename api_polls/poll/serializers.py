@@ -5,6 +5,12 @@ from .models import Poll, Question, Choice, Answer, Vote
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
+    """
+    Serializer Choice
+    Fields: id, text
+    Read_only: id
+
+    """
     class Meta:
         model = Choice
         fields = ('id', 'text')
@@ -12,6 +18,12 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 
 class QuestionSerializer(serializers.ModelSerializer):
+    """
+    Serializer Question
+    Fields: id, poll, question_txt, type, choices
+    Read_only: id
+
+    """
     type = serializers.ChoiceField(
         choices=Question.Type.Choices, default=Question.Type.COMMON_TXT
     )
@@ -27,6 +39,12 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class PollSerializer(serializers.ModelSerializer):
+    """
+    Serializer Poll
+    Fields: id, title, start_date, finish_date, description, questions
+    Read_only: id
+
+    """
     questions = QuestionSerializer(many=True, read_only=True)
 
     class Meta:
@@ -44,6 +62,12 @@ class PollSerializer(serializers.ModelSerializer):
 
 
 class AnswerSerializer(serializers.ModelSerializer):
+    """
+    Serializer Answer
+    Fields: id, question, choice, choice_id, question_id
+    Read_only: id
+
+    """
     choice = ChoiceSerializer(read_only=True)
     choice_id = ObjectIDField(queryset=Choice.objects.all(), write_only=True)
     question = QuestionSerializer(read_only=True)
@@ -51,14 +75,21 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ('id', 'question', 'choice', 'value')
+        fields = ('id', 'question', 'choice', 'choice_id', 'question_id')
         read_only_fields = ('id',)
 
 
 class VoteSerializer(serializers.ModelSerializer):
+    """
+    Serializer Choice
+    Fields: id, poll_id, poll, user, date, answers
+    Read_only: id
+
+    """
     poll = PollSerializer(read_only=True)
+    answers = AnswerSerializer(many=True)
 
     class Meta:
         model = Vote
-        fields = ('id', 'poll_id', 'poll', 'user', 'date')
+        fields = ('id', 'poll_id', 'poll', 'user', 'date', 'answers')
         read_only_fields = ('id', 'user', 'date')

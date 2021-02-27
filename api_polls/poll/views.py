@@ -1,8 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+
 from .models import Poll, Question, Vote
 from .serializers import PollSerializer, QuestionSerializer, VoteSerializer
 from .permissons import PollPermission, QuestionPermission
+from .filters import VoteFilter
 
 
 class PollViewSet(viewsets.ModelViewSet):
@@ -16,6 +18,7 @@ class VoteViewSet(viewsets.ModelViewSet):
     serializer_class = VoteSerializer
     filter_backends = (DjangoFilterBackend, )
     http_method_names = ('get', 'post')
+    filterset_class = VoteFilter
 
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
@@ -27,5 +30,3 @@ class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
     permission_classes = (QuestionPermission, )
-
-

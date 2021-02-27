@@ -1,0 +1,7 @@
+services:
+
+  api_polls:
+    build: .
+    ports:
+      - "8000:8000"
+    command: python /app/api_polls/manage.py runserver 0.0.0.0:8000
