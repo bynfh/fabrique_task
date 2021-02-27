@@ -1,7 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import Poll, Question, Vote
 from .serializers import PollSerializer, QuestionSerializer, VoteSerializer
@@ -13,14 +11,6 @@ class PollViewSet(viewsets.ModelViewSet):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
     permission_classes = (PollPermission, )
-
-class SnippetList(APIView):
-    """
-    List all snippets, or create a new snippet.
-    """
-    def get(self, request, format=None):
-        serializer = SnippetSerializer
-        return Response(serializer.data)
 
 
 class VoteViewSet(viewsets.ModelViewSet):
@@ -40,5 +30,3 @@ class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
     permission_classes = (QuestionPermission, )
-
-
